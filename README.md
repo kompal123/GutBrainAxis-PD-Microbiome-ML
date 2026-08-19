@@ -46,7 +46,14 @@ Run with Nextflow:
 nextflow run main.nf
 ```
 
-Note: the Bash workflow was used for local verification in this workspace because Nextflow is not currently installed on this machine. The `main.nf` workflow is included for reproducible execution on a Nextflow-enabled system.
+If Nextflow is installed outside your shell `PATH`, call it directly. In this workspace the verified command was:
+
+```bash
+NXF_HOME=$PWD/.nextflow \
+JAVA_CMD=/Users/kompal/miniconda3/envs/cns-drug-discovery/lib/jvm/bin/java \
+PATH=/Users/kompal/miniconda3/envs/cns-drug-discovery/bin:$PATH \
+/Users/kompal/nextflow run main.nf
+```
 
 ## What Each Step Does
 

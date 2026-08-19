@@ -9,10 +9,9 @@ process PREPARE_DATA {
 
     script:
     """
-    cd ${baseDir}
-    export PYTHONPATH=src
-    python src/00_prepare_data.py --top-n ${params.top_n} --prevalence ${params.prevalence}
-    touch ${task.workDir}/prepare_data.done
+    export PYTHONPATH=${baseDir}/src
+    python ${baseDir}/src/00_prepare_data.py --top-n ${params.top_n} --prevalence ${params.prevalence}
+    touch prepare_data.done
     """
 }
 
@@ -25,10 +24,9 @@ process DIFFERENTIAL_TAXA {
 
     script:
     """
-    cd ${baseDir}
-    export PYTHONPATH=src
-    python src/01_differential_taxa.py
-    touch ${task.workDir}/differential_taxa.done
+    export PYTHONPATH=${baseDir}/src
+    python ${baseDir}/src/01_differential_taxa.py
+    touch differential_taxa.done
     """
 }
 
@@ -41,10 +39,9 @@ process TRAIN_ML {
 
     script:
     """
-    cd ${baseDir}
-    export PYTHONPATH=src
-    python src/02_train_ml.py
-    touch ${task.workDir}/train_ml.done
+    export PYTHONPATH=${baseDir}/src
+    python ${baseDir}/src/02_train_ml.py
+    touch train_ml.done
     """
 }
 
@@ -58,10 +55,9 @@ process BIOLOGICAL_STORY {
 
     script:
     """
-    cd ${baseDir}
-    export PYTHONPATH=src
-    python src/03_gut_brain_story.py
-    touch ${task.workDir}/biological_story.done
+    export PYTHONPATH=${baseDir}/src
+    python ${baseDir}/src/03_gut_brain_story.py
+    touch biological_story.done
     """
 }
 
