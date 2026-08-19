@@ -1,19 +1,22 @@
 # GutBrainAxis-PD-Microbiome-ML
 
-Machine learning and biological interpretation pipeline for gut-brain axis signals in Parkinson's disease using public shotgun metagenomics data.
+Nextflow-powered machine learning and biological interpretation pipeline for gut-brain axis signals in Parkinson's disease using public shotgun metagenomics data.
 
 ## Project Idea
 
 This project asks whether stool metagenomic profiles can distinguish Parkinson's disease from neurologically healthy controls, and which microbial taxa may support a gut-brain axis biological story.
 
-```text
-shotgun metagenomics source data
--> species relative abundance matrix
--> compositional feature transformation
--> differential species analysis
--> Parkinson's disease classifier
--> microbial feature importance
--> gut-brain axis mechanism annotation
+```mermaid
+flowchart TD
+    A["Zenodo source workbook"] --> B["PREPARE_DATA"]
+    B --> C["Species abundance matrix"]
+    C --> D["DIFFERENTIAL_TAXA"]
+    C --> E["TRAIN_ML"]
+    D --> F["Differential species table"]
+    E --> G["PD classifier + feature importance"]
+    F --> H["BIOLOGICAL_STORY"]
+    G --> H
+    H --> I["Gut-brain axis interpretation"]
 ```
 
 ## Dataset
@@ -32,12 +35,39 @@ The workflow uses the processed source-data workbook from Zenodo:
 
 The raw workbook is downloaded into `data/raw/` and is ignored by Git because it is large.
 
-## Workflow
+## Nextflow Workflow
 
-Run with Bash:
+This repository is organized as a reproducible Nextflow pipeline. The main entry point is:
+
+```text
+main.nf
+```
+
+The workflow has four processes:
+
+| Nextflow process | Script | Purpose |
+|---|---|---|
+| `PREPARE_DATA` | `src/00_prepare_data.py` | Download/read Zenodo source data, build metadata and species feature matrices |
+| `DIFFERENTIAL_TAXA` | `src/01_differential_taxa.py` | Identify species shifted between PD and controls |
+| `TRAIN_ML` | `src/02_train_ml.py` | Train PD vs control classifiers and calculate feature importance |
+| `BIOLOGICAL_STORY` | `src/03_gut_brain_story.py` | Combine statistics and ML importance into gut-brain axis interpretation |
+
+The dependency graph is:
+
+```text
+PREPARE_DATA
+├── DIFFERENTIAL_TAXA
+├── TRAIN_ML
+└── BIOLOGICAL_STORY waits for both DIFFERENTIAL_TAXA and TRAIN_ML
+```
+
+## Quick Start
+
+Create the environment:
 
 ```bash
-bash workflows/run_pipeline.sh
+conda env create -f environment.yml
+conda activate gut-brain-axis-ml
 ```
 
 Run with Nextflow:
@@ -46,13 +76,25 @@ Run with Nextflow:
 nextflow run main.nf
 ```
 
-If Nextflow is installed outside your shell `PATH`, call it directly. In this workspace the verified command was:
+If your `nextflow` launcher is installed at `/Users/kompal/nextflow`, use:
 
 ```bash
-NXF_HOME=$PWD/.nextflow \
-JAVA_CMD=/Users/kompal/miniconda3/envs/cns-drug-discovery/lib/jvm/bin/java \
-PATH=/Users/kompal/miniconda3/envs/cns-drug-discovery/bin:$PATH \
 /Users/kompal/nextflow run main.nf
+```
+
+If Java is provided by the active conda environment, use:
+
+```bash
+conda activate gut-brain-axis-ml
+NXF_HOME=$PWD/.nextflow \
+JAVA_CMD=$CONDA_PREFIX/lib/jvm/bin/java \
+/Users/kompal/nextflow run main.nf
+```
+
+For a simple non-Nextflow fallback:
+
+```bash
+bash workflows/run_pipeline.sh
 ```
 
 ## What Each Step Does
@@ -118,6 +160,8 @@ Differential abundance highlights PD-associated species such as `Actinomyces ori
 
 ## GitHub Outputs
 
+Nextflow writes local working files under `work/` and analysis outputs under `results/`. The curated GitHub-facing figures and summary tables are copied to `docs/` so they render directly in the README.
+
 Figures:
 
 ```text
@@ -139,7 +183,7 @@ docs/tables/top_ml_taxa_importance.csv
 docs/tables/gut_brain_axis_taxa_story.csv
 ```
 
-## Biological Story
+## Biological Interpretation
 
 Parkinson's disease has strong gastrointestinal involvement, including constipation and altered gut physiology. This project treats the gut microbiome as a measurable molecular phenotype of the gut-brain axis.
 
