@@ -41,7 +41,7 @@ def main() -> None:
     fig.set_xlabel("Number of top taxa")
     fig.set_ylabel("Gut-brain axis mechanism")
     fig.set_title("Biological themes among top PD microbiome signals")
-    save_fig(FIGURE_DIR / "gut_brain_mechanism_summary.png")
+    save_fig(FIGURE_DIR / "gut_brain_mechanism_summary.png", close=False)
     save_fig(DOC_FIGURE_DIR / "gut_brain_mechanism_summary.png")
     print(story.head(15)[["taxon", "direction", "importance", "gut_brain_axis_hypothesis"]])
 

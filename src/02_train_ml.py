@@ -64,7 +64,7 @@ def main() -> None:
     ax.set_xlabel("5-fold ROC-AUC")
     ax.set_ylabel("Model")
     ax.set_title("Parkinson's disease classifier from gut species")
-    save_fig(FIGURE_DIR / "pd_classifier_benchmark.png")
+    save_fig(FIGURE_DIR / "pd_classifier_benchmark.png", close=False)
     save_fig(DOC_FIGURE_DIR / "pd_classifier_benchmark.png")
 
     train_idx, test_idx = train_test_split(X.index, test_size=0.2, stratify=y, random_state=RANDOM_STATE)
@@ -94,7 +94,7 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=(5.2, 4.7))
     ConfusionMatrixDisplay.from_predictions(y.loc[test_idx], pred, display_labels=["Control", "PD"], cmap="Blues", colorbar=False, ax=ax)
     ax.set_title("Held-out PD classification")
-    save_fig(FIGURE_DIR / "pd_confusion_matrix.png")
+    save_fig(FIGURE_DIR / "pd_confusion_matrix.png", close=False)
     save_fig(DOC_FIGURE_DIR / "pd_confusion_matrix.png")
 
     perm = permutation_importance(best, X.loc[test_idx], y.loc[test_idx], n_repeats=20, random_state=RANDOM_STATE, n_jobs=1)
@@ -107,7 +107,7 @@ def main() -> None:
     ax.set_xlabel("Permutation importance")
     ax.set_ylabel("Species")
     ax.set_title("Microbial features driving PD prediction")
-    save_fig(FIGURE_DIR / "ml_taxa_importance.png")
+    save_fig(FIGURE_DIR / "ml_taxa_importance.png", close=False)
     save_fig(DOC_FIGURE_DIR / "ml_taxa_importance.png")
 
     joblib.dump(best, MODEL_DIR / "pd_microbiome_classifier.joblib")

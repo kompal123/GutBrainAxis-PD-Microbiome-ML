@@ -20,10 +20,11 @@ def ensure_dirs(*paths: Path) -> None:
         path.mkdir(parents=True, exist_ok=True)
 
 
-def save_fig(path: Path, dpi: int = 180) -> None:
+def save_fig(path: Path, dpi: int = 180, close: bool = True) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(path, dpi=dpi, bbox_inches="tight")
-    plt.close()
+    if close:
+        plt.close()
 
 
 def short_taxon_name(clade: str) -> str:

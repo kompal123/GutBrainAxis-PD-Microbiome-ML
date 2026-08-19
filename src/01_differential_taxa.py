@@ -59,7 +59,7 @@ def main() -> None:
     ax.set_xlabel("log2 fold change: PD vs control")
     ax.set_ylabel("Species")
     ax.set_title("Gut microbial species shifted in Parkinson's disease")
-    save_fig(FIGURE_DIR / "differential_species_log2fc.png")
+    save_fig(FIGURE_DIR / "differential_species_log2fc.png", close=False)
     save_fig(DOC_FIGURE_DIR / "differential_species_log2fc.png")
     print(out.head(10))
 
