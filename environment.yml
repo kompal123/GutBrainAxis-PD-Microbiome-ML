@@ -1,0 +1,13 @@
+name: gut-brain-axis-ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - openpyxl
+  - joblib
